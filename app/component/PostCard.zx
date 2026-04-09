@@ -1,25 +1,22 @@
-var post: *zx.State(BlogPost) = undefined;
-
 pub fn PostCard(ctx: *zx.ComponentCtx(struct { post: BlogPost })) !zx.Component {
-    const allocator = std.heap.page_allocator;
-    post = ctx.state(BlogPost, ctx.props.post);
-    const index = post.get().index;
-    const url = try std.fmt.allocPrint(allocator, "https://www4r4e.github.io/Wblog/blog/{s}", .{index});
+    const post = ctx.props.post;
+    const url = try std.fmt.allocPrint(ctx.allocator, "/blog/{s}", .{post.index});
+
     return (
         <article class="post-card" @allocator={ctx.allocator}>
-            <PostMeta meta={post.get().meta} />
+            <PostMeta meta={post.meta} />
             <h2 class="post-title">
                 <a href={url} class="post-link">
-                    {post.get().title}
+                    {post.title}
                 </a>
             </h2> 
             <p class="post-excerpt">
                 
-                {post.get().excerpt}
+                {post.excerpt}
             </p> 
             <div class="postcard-footer">
                 <div class="post-tags">
-                    {for (post.get().tags) |tag| (
+                    {for (post.tags) |tag| (
                         <a href={`/tags/{tag}`}>{tag}</a>
                     )} 
                 </div> 

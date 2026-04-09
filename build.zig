@@ -7,6 +7,8 @@ pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
+    const base_path = b.option([]const u8, "base-path", "Base path of the public URL");
+
     // 提供markdown解析支持
     const markz_dep = b.dependency("markz", .{ .target = target, .optimize = optimize });
 
@@ -19,5 +21,10 @@ pub fn build(b: *std.Build) !void {
     });
 
     // --- ZX setup: wires dependencies and adds `zx`/`dev` build steps ---
-    _ = try zx.init(b, app_exe, .{});
+    _ = try zx.init(b, app_exe, .{
+        .app = .{
+            .path = b.path("app"),
+            .base_path = base_path,
+        },
+    });
 }
