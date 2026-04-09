@@ -2,12 +2,12 @@ pub fn Page(ctx: zx.PageContext) !zx.Component {
     return (
         <div @allocator={ctx.arena} class="blog-post-container">
             
-            //     <h1 class="page-title">归档</h1> 
+                <h1 class="page-title">归档</h1> 
             // <div class="post-card">
             //     <h3 class="year-title">2026</h3>
             //     <ul class="post-list">
             //         <li class="post-item">
-            //             <a href="/blog/test" class="post-link">
+            //             <a href="Wblog/blog?0" class="post-link">
             //                 <span class="post-title">测试文章</span>
             //                 <span class="tag">04-01</span>
             //             </a>
@@ -18,13 +18,13 @@ pub fn Page(ctx: zx.PageContext) !zx.Component {
             //     <h3 class="year-title">2025</h3>
             //     <ul class="post-list">
             //         <li>
-            //             <a href="/blog/dx11" class="post-link">
+            //             <a href="Wblog/blog?1" class="post-link">
             //                 <span class="post-title">DX11渲染初始化流程笔记</span>
             //                 <span class="tag">12-15</span>
             //             </a>
             //         </li>
             //         <li class="post-item">
-            //             <a href="/blog/3d-matrix" class="post-link">
+            //             <a href="Wblog/blog?2" class="post-link">
             //                 <span class="post-title">3D变换矩阵详解</span>
             //                 <span class="tag">11-20</span>
             //             </a>

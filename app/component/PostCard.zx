@@ -4,12 +4,12 @@ pub fn PostCard(ctx: *zx.ComponentCtx(struct { post: BlogPost })) !zx.Component 
     const allocator = std.heap.page_allocator;
     post = ctx.state(BlogPost, ctx.props.post);
     const index = post.get().index;
-    const url = try std.fmt.allocPrint(allocator, "/blog/{s}", .{index});
+    const url = try std.fmt.allocPrint(allocator, "https://www4r4e.github.io/Wblog/blog/{s}", .{index});
     return (
         <article class="post-card" @allocator={ctx.allocator}>
             <PostMeta meta={post.get().meta} />
             <h2 class="post-title">
-                <a href=/{url} class="post-link">
+                <a href={url} class="post-link">
                     {post.get().title}
                 </a>
             </h2> 
@@ -20,12 +20,15 @@ pub fn PostCard(ctx: *zx.ComponentCtx(struct { post: BlogPost })) !zx.Component 
             <div class="postcard-footer">
                 <div class="post-tags">
                     {for (post.get().tags) |tag| (
-                        <a href={`/tags/{tag}`} class="tag">{tag}</a>
+                        <a href={`/tags/{tag}`}>{tag}</a>
                     )} 
                 </div> 
-                <a href=/{url} class="app-btn app-btn-primary">阅读全文 →</a> 
-            </div>
-        </article>
+            
+                <div>
+                    <a href={url} class="app-btn app-btn-primary">阅读全文 →</a> 
+                </div>
+            </div> 
+        </article> 
     ); 
 }
 

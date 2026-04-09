@@ -7,7 +7,7 @@ pub fn Layout(ctx: zx.LayoutCtx(AppCtx, void), children: zx.Component) zx.Compon
                 <title>WBlog</title>
                 <link href="https://cdn.jsdelivr.net/npm/windows-ui-fabric@4.0.2/dist/config/app-config.css" rel="stylesheet" /> 
                 <link href="https://cdn.jsdelivr.net/npm/windows-ui-fabric@4.0.2/dist/windows-ui.min.css" rel="stylesheet" /> 
-                <link rel="stylesheet" href="/assets/style.css" />
+                <link rel="stylesheet" href="https://www4r4e.github.io/Wblog/assets/style.css" />
             </head>
 
             <body class="body-layout">
