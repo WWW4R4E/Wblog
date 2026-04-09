@@ -1,7 +1,6 @@
-
 var blog_list: []md.BlogPost = undefined;
 pub fn Page(ctx: zx.PageContext) !zx.Component {
-    blog_list = try md.loadBlogPosts(); 
+    blog_list = try md.loadBlogPosts();
     const query: usize = try std.fmt.parseInt(usize, ctx.request.params.get("id") orelse return error.MissingId, 10);
     const post = blog_list[query];
     const html_content = try md.markdownToHtml(post.content);
@@ -70,8 +69,8 @@ pub const options = zx.PageOptions{
 
 fn getStaticParams(allocator: zx.Allocator) ![]const []const zx.PageOptions.StaticParam {
     var params = std.ArrayList([]const zx.PageOptions.StaticParam).empty;
-
-    for (blog_list) |i| { 
+    blog_list = try md.loadBlogPosts();
+    for (blog_list) |i| {
         const sp = try allocator.alloc(zx.PageOptions.StaticParam, 1);
         sp[0] = .{ .key = "id", .value = i.index };
         try params.append(allocator, sp);
