@@ -21,33 +21,44 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Zig
-        uses: mlugg/setup-zig@v2
-        with:
-          version: 0.15.2
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        
-      - name: Build Site
-        run: zig build --release=small
-
       - name: Install zx
         run: curl -fsSL https://ziex.dev/install | bash
-
+        
       - name: Set zx permission
-        run: chmod +x /home/runner/.zx/bin/zx
+        run: chmod +x ~/.zx/bin/zx
+        
+      - name: Test zx availability
+        run: |
+          echo "Testing zx installation..."
+          ~/.zx/bin/zx --version
+          echo "zx is available and working!"
+      # - name: Checkout
+      #   uses: actions/checkout@v4
 
-      - name: Export Site
-        run: /home/runner/.zx/bin/zx export
+      # - name: Setup Zig
+      #   uses: mlugg/setup-zig@v2
+      #   with:
+      #     version: 0.15.2
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
+      # - name: Setup Pages
+      #   uses: actions/configure-pages@v5
+        
+      # - name: Build Site
+      #   run: zig build --release=small
+
+      # - name: Install zx
+      #   run: curl -fsSL https://ziex.dev/install | bash
+
+      # - name: Set zx permission
+      #   run: chmod +x /home/runner/.zx/bin/zx
+
+      # - name: Export Site
+      #   run: /home/runner/.zx/bin/zx export
+
+      # - name: Upload artifact
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     path: ./dist
 
   deploy:
     environment:
