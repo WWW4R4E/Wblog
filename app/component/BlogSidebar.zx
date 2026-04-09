@@ -1,0 +1,39 @@
+var count: *zx.State(usize) = undefined;
+pub fn BlogSidebar(ctx: *zx.ComponentCtx(struct { count: usize })) zx.Component {
+    count = ctx.state(usize, ctx.props.count);
+    return (
+        <aside @allocator={ctx.allocator} class="blog-sidebar">
+            <div class="sidebar-section profile-section">
+                <div class="profile-avatar">
+                    <img src="/assets/avatar.jpg" alt="最最最可爱的黄色奶龙" class="avatar" />
+                </div> 
+                <div>
+                    <h3 class="profile-name">最最最可爱的黄色奶龙</h3>
+                    <p class="profile-bio">图一乐</p>
+                </div>
+            </div>
+
+            <div class="sidebar-section tags-section">
+                <h4 class="sidebar-title">热门标签</h4>
+                <div class="tag-cloud">
+                    <a href="/tag/javascript" class="tag">Csharp</a>
+                    <a href="/tag/zig" class="tag">Zig</a>
+                    <a href="/tag/windows" class="tag">windows</a>
+                    <a href="/tag/linux" class="tag">Linux</a>
+                    <a href="/tag/book" class="tag">读书笔记</a>
+                </div>
+            </div>
+
+            <div class="sidebar-section archive-section">
+                <h4 class="sidebar-title">归档</h4>
+                <ul class="archive-list">
+                    <li><a href="/archive/2024" class="archive-link">2026年 ({count})</a></li>
+                </ul>
+            </div>
+        </aside>
+    );
+}
+
+const zx = @import("zx");
+const AppCtx = struct { blog_list: []md.BlogPost = &[_]md.BlogPost{} };
+const md = @import("../mdloader.zig");

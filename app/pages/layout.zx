@@ -1,0 +1,31 @@
+pub fn Layout(ctx: zx.LayoutCtx(AppCtx, void), children: zx.Component) zx.Component {
+    return (
+        <html @allocator={ctx.arena} lang="en-US">
+            <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <title>WBlog</title>
+                <link href="https://cdn.jsdelivr.net/npm/windows-ui-fabric@4.0.2/dist/config/app-config.css" rel="stylesheet" /> 
+                <link href="https://cdn.jsdelivr.net/npm/windows-ui-fabric@4.0.2/dist/windows-ui.min.css" rel="stylesheet" /> 
+                <link rel="stylesheet" href="/assets/style.css" />
+            </head>
+
+            <body class="body-layout">
+                <BlogHeader is_dark={is_dark} />
+                <main class="main-content">
+                    {children}
+                </main>
+                <BlogSidebar count={ctx.app.blog_list.len} />
+                <BlogFooter />
+            </body>
+        </html>
+    );
+}
+
+var is_dark: bool = false;
+const md = @import("../mdloader.zig");
+const zx = @import("zx");
+const AppCtx = struct { blog_list: []md.BlogPost = &[_]md.BlogPost{} };
+pub const BlogHeader = @import("../component/BlogHeader.zx").BlogHeader;
+pub const BlogFooter = @import("../component/BlogFooter.zx").BlogFooter;
+pub const BlogSidebar = @import("../component/BlogSidebar.zx").BlogSidebar;

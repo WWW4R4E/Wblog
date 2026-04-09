@@ -1,0 +1,13 @@
+pub fn BlogFooter(allocator: zx.Allocator) zx.Component {
+    return (
+        <footer @allocator={allocator} class="blog-footer">
+            <div class="footer-container">
+                    <div class="footer-copyright">
+                        <p>特别感谢 <a href="https://github.com/ziex-dev/ziex" target="_blank" class="footer-link">Ziex</a> 和 <a href="https://github.com/virtualvivek/windows-ui" target="_blank" class="footer-link">windows-ui</a> 项目</p>
+                    </div>
+            </div>
+        </footer>
+    );
+}
+
+const zx = @import("zx");

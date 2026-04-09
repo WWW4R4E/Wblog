@@ -1,0 +1,21 @@
+.{
+    .name = .ziex_app,
+    .version = "0.0.0",
+    .fingerprint = 0x7246d8c908f650a4,
+    .minimum_zig_version = "0.15.2",
+    .dependencies = .{
+        .zx = .{
+            .url = "git+https://github.com/ziex-dev/ziex#ce728232ad9e40ddddc590d07a043fe506cb9ad5",
+            .hash = "zx-0.1.0-dev.987-8okzKiSFmQF4oQ0OYMhdduqEIsSYlDoVODTdHEXhCr3c",
+        },
+        .markz = .{
+            .url = "git+https://codeberg.org/sicher/markz?ref=main#5f56ce8364b5af5af72afe63ca335f39a756b34e",
+            .hash = "markz-0.1.0-53lpvKOcBgAKt-21K3lqIjiqxRNaJTsC9c6VA-BOq2_W",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "app",
+    },
+}

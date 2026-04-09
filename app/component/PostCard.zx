@@ -1,0 +1,36 @@
+var post: *zx.State(BlogPost) = undefined;
+
+pub fn PostCard(ctx: *zx.ComponentCtx(struct { post: BlogPost })) !zx.Component {
+    const allocator = std.heap.page_allocator;
+    post = ctx.state(BlogPost, ctx.props.post);
+    const index = post.get().index;
+    const url = try std.fmt.allocPrint(allocator, "/blog/{s}", .{index});
+    return (
+        <article class="post-card" @allocator={ctx.allocator}>
+            <PostMeta meta={post.get().meta} />
+            <h2 class="post-title">
+                <a href=/{url} class="post-link">
+                    {post.get().title}
+                </a>
+            </h2> 
+            <p class="post-excerpt">
+                
+                {post.get().excerpt}
+            </p> 
+            <div class="postcard-footer">
+                <div class="post-tags">
+                    {for (post.get().tags) |tag| (
+                        <a href={`/tags/{tag}`} class="tag">{tag}</a>
+                    )} 
+                </div> 
+                <a href=/{url} class="app-btn app-btn-primary">阅读全文 →</a> 
+            </div>
+        </article>
+    ); 
+}
+
+const zx = @import("zx");
+const std = @import("std");
+const BlogPost = @import("../mdloader.zig").BlogPost;
+const PostMeta = @import("PostMeta.zx").PostMeta;
+ 

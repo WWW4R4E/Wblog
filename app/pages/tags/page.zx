@@ -1,0 +1,51 @@
+pub fn Page(ctx: zx.PageContext) !zx.Component {
+    const a = 1;
+    const b = 2;
+    return (
+        <div @allocator={ctx.allocator} class="tags-page">
+            <h1 class="page-title">标签</h1>
+
+            <div class="tags-container">
+                <a href="#" class="tag">前端开发
+                    <span class="tag-count">{a}</span>
+                </a>
+                <a href="#" class="tag">后端开发
+                    <span class="tag-count">{b}</span>
+                </a>
+                <a href="#" class="tag">React
+                    <span class="tag-count">{a}</span>
+                </a>
+                <a href="#" class="tag">TypeScript
+                    <span class="tag-count">{a}</span>
+                </a>
+                         <a href="#" class="tag">后端开发
+                    <span class="tag-count">{b}</span>
+                </a>
+                <a href="#" class="tag">React
+                    <span class="tag-count">{a}</span>
+                </a>
+                <a href="#" class="tag">TypeScript
+                    <span class="tag-count">{a}</span>
+                </a>         <a href="#" class="tag">后端开发
+                    <span class="tag-count">{b}</span>
+                </a>
+                <a href="#" class="tag">React
+                    <span class="tag-count">{a}</span>
+                </a>
+                <a href="#" class="tag">TypeScript
+                    <span class="tag-count">{a}</span>
+                </a>         <a href="#" class="tag">后端开发
+                    <span class="tag-count">{b}</span>
+                </a>
+                <a href="#" class="tag">React
+                    <span class="tag-count">{a}</span>
+                </a>
+                <a href="#" class="tag">TypeScript
+                    <span class="tag-count">{a}</span>
+                </a>
+            </div>
+        </div>
+    );
+}
+
+const zx = @import("zx");

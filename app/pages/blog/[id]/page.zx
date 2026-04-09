@@ -1,0 +1,88 @@
+
+var blog_list: []md.BlogPost = undefined;
+pub fn Page(ctx: zx.PageContext) !zx.Component {
+    blog_list = try md.loadBlogPosts(); 
+    const query: usize = try std.fmt.parseInt(usize, ctx.request.params.get("id") orelse return error.MissingId, 10);
+    const post = blog_list[query];
+    const html_content = try md.markdownToHtml(post.content);
+    return (
+        <div @allocator={ctx.allocator} class="blog-post-container">
+            <article class="blog-post">
+                <div class="post-header">
+                    <PostMeta meta={post.meta} /> 
+                    <h1 class="post-title">{post.title}</h1> 
+                </div> 
+                <div class="post-content" @escaping={.none}> {html_content} </div> 
+                <div class="post-footer">
+                    <div class="post-actions">
+                        <div class="post-tags">
+                            {for (post.tags) |tag| (
+                                <a href={"/tag/{tag}"} class="tag">{tag}</a>
+                            )} 
+                        </div>
+                    </div> 
+                </div> 
+            </article> 
+
+            // <div class="related-posts">
+            //     <h3 class="related-title">相关推荐</h3>
+            //     <div class="related-posts-list">
+            //         <div class="related-post-item">
+            //             <a href="/blog/rust-vs-zig" class="related-post-link">Rust与Zig的对比分析</a>
+            //         </div>
+            //         <div class="related-post-item">
+            //             <a href="/blog/zig-memory-management" class="related-post-link">Zig的内存管理机制</a>
+            //         </div>
+            //         <div class="related-post-item">
+            //             <a href="/blog/zig-build-system" class="related-post-link">Zig的构建系统详解</a>
+            //         </div>
+            //     </div>
+            // </div>
+
+            <div class="comments-section">
+                <h3 class="comments-title">评论</h3>
+                <div class="comments-form">
+                    <textarea placeholder="写下你的评论..." class="app-textarea comment-input"></textarea>
+                    <button class="app-btn app-btn-primary comment-btn">提交评论</button>
+                </div> 
+                // <div class="comments-list">
+                //     <div class="comment-item">
+                //         <div class="comment-author">用户1</div>
+                //         <div class="comment-date">2024-01-16</div>
+                //         <div class="comment-content">这篇文章写得很好，对Zig的介绍很全面！</div>
+                //     </div>
+                //     <div class="comment-item">
+                //         <div class="comment-author">用户2</div>
+                //         <div class="comment-date">2024-01-17</div>
+                //         <div class="comment-content">谢谢分享，我正在学习Zig，这篇文章对我帮助很大。</div>
+                //     </div>
+                // </div>
+            </div>
+        </div>
+    );
+}
+
+pub const options = zx.PageOptions{
+    .static = .{
+        .getParams = getStaticParams,
+    },
+};
+
+fn getStaticParams(allocator: zx.Allocator) ![]const []const zx.PageOptions.StaticParam {
+    var params = std.ArrayList([]const zx.PageOptions.StaticParam).empty;
+
+    for (blog_list) |i| { 
+        const sp = try allocator.alloc(zx.PageOptions.StaticParam, 1);
+        sp[0] = .{ .key = "id", .value = i.index };
+        try params.append(allocator, sp);
+    }
+    return params.items;
+}
+
+const zx = @import("zx");
+const BlogPost = @import("../../../mdloader.zig").BlogPost;
+const BlogMeta = @import("../../../mdloader.zig").BlogMeta;
+const PostMeta = @import("../../../component/PostMeta.zx").PostMeta;
+const AppCtx = struct { blog_list: []md.BlogPost = &[_]md.BlogPost{} };
+const md = @import("../../../mdloader.zig");
+const std = @import("std");

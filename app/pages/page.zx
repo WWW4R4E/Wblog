@@ -1,0 +1,52 @@
+pub fn Page(ctx: zx.PageCtx(AppCtx, void)) !zx.Component {
+    const blog_list = ctx.app.blog_list;
+    return (
+        <div class="blog-content" @allocator={ctx.arena}>
+            <div class="blog-post-list">
+                <div class="list-header">
+                    <h1 class="page-title">首页</h1> 
+                    <div class=" search-form">
+                        <div class="app-input-search-bar ">
+                            <input class="app-input-text" type="search" placeholder="Search here"> </input>
+                            <div class="app-input-end-content">
+                                <button type="submit" style="border: none; background: transparent;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                </button>
+                            </div> 
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="posts-container">
+                    {for (blog_list) |post| (
+                        <PostCard post={post} />
+                    )}
+                </div> 
+
+                <div class="pagination">
+                    <a href="?page=1" class="app-btn page-link">← 上一页</a>
+
+                    <div class="page-numbers">
+                        <a href="?page=1" class="app-btn page-link">1</a>
+                        <a href="?page=2" class="app-btn page-link">2</a>
+                        <a href="?page=3" class="app-btn page-link">3</a>
+                        <span class="page-ellipsis">...</span>
+                        <a href="?page=10" class="app-btn page-link">10</a>
+                    </div>
+
+                    <a href="?page=2" class="app-btn page-link">下一页 →</a>
+                </div>
+            </div>
+        </div>
+    );
+}
+var is_dark: bool = false;
+
+const zx = @import("zx");
+const BlogPost = @import("../mdloader.zig").BlogPost;
+const PostCard = @import("../component/PostCard.zx").PostCard;
+const AppCtx = struct { blog_list: []md.BlogPost = &[_]md.BlogPost{} };
+const md = @import("../mdloader.zig");
