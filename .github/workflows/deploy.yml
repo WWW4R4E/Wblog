@@ -38,6 +38,9 @@ jobs:
       - name: Install zx
         run: curl -fsSL https://ziex.dev/install | bash
 
+      - name: Set zx permission
+        run: chmod +x /home/runner/.zx/bin/zx
+
       - name: Export Site
         run: /home/runner/.zx/bin/zx export
 
