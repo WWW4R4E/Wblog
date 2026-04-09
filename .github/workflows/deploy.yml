@@ -36,10 +36,14 @@ jobs:
         run: zig build --release=small
 
       - name: Install zx
-        run: curl -fsSL https://ziex.dev/install | bash
+        run: |
+          curl -fsSL https://ziex.dev/install | bash
+          source ~/.bash_profile
+          export PATH="$HOME/.zx/bin:$PATH"
+          echo "PATH=$PATH" >> $GITHUB_ENV
 
       - name: Export Site
-        run: ~/.zx/bin/zx export
+        run: zx export
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
