@@ -69,9 +69,10 @@ pub const options = zx.PageOptions{
 };
 
 fn getStaticParams(allocator: zx.Allocator) ![]const []const zx.PageOptions.StaticParam {
+    const bl =  try md.loadBlogPosts();
     var params = std.ArrayList([]const zx.PageOptions.StaticParam).empty;
 
-    for (blog_list) |i| { 
+    for (bl) |i| { 
         const sp = try allocator.alloc(zx.PageOptions.StaticParam, 1);
         sp[0] = .{ .key = "id", .value = i.index };
         try params.append(allocator, sp);
