@@ -21,16 +21,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Install zx
-        run: curl -fsSL https://ziex.dev/install | bash
-        
-      - name: Set zx permission
-        run: chmod +x ~/.zx/bin/zx
-      
-      - name: Checkout version
-        run: ~/.zx/bin/zx v
-
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -44,7 +34,16 @@ jobs:
         
       - name: Build Site
         run: zig build --release=small
+      
+      - name: Install zx
+        run: curl -fsSL https://ziex.dev/install | bash
         
+      - name: Set zx permission
+        run: chmod +x ~/.zx/bin/zx
+      
+      - name: Checkout version
+        run: ~/.zx/bin/zx v
+
       - name: Export Site
         run: ~/.zx/bin/zx export
 
