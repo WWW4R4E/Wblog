@@ -6,7 +6,7 @@ const markz = @import("markz");
 
 pub fn loadBlogPosts() ![]BlogPost {
     const allocator = std.heap.page_allocator;
-    const markdown_dir = "C:\\Users\\123\\Desktop\\Wblog\\app\\assets\\markdown";
+    const markdown_dir = "app" ++ std.fs.path.sep_str ++ "assets" ++ std.fs.path.sep_str ++ "markdown";
     var dir = try fs.cwd().openDir(markdown_dir, .{ .iterate = true });
     defer dir.close();
 
@@ -109,7 +109,7 @@ pub fn markdownToHtml(markdown: []const u8) ![]const u8 {
         break :blk try markz.renderHtml(allocator, &doc);
     };
     return html;
-} 
+}
 
 pub const BlogPost = struct {
     index: []const u8,
