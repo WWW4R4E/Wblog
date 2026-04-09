@@ -39,7 +39,7 @@ jobs:
         run: curl -fsSL https://ziex.dev/install | bash
 
       - name: Export Site
-        run: zx export
+        run: ~/.zx/bin/zx export
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
