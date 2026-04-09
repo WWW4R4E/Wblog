@@ -26,7 +26,11 @@ jobs:
         
       - name: Set zx permission
         run: chmod +x ~/.zx/bin/zx
-        
+      
+      - name: Checkout version
+        run: ~/.zx/bin/zx v
+
+
       - name: Checkout
         uses: actions/checkout@v4
 
