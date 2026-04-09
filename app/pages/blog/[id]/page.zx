@@ -1,7 +1,6 @@
-
 var blog_list: []md.BlogPost = undefined;
 pub fn Page(ctx: zx.PageContext) !zx.Component {
-    blog_list = try md.loadBlogPosts(); 
+    blog_list = try md.loadBlogPosts();
     const query: usize = try std.fmt.parseInt(usize, ctx.request.params.get("id") orelse return error.MissingId, 10);
     const post = blog_list[query];
     const html_content = try md.markdownToHtml(post.content);
