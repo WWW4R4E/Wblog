@@ -35,8 +35,11 @@ jobs:
       - name: Build Site
         run: zig build --release=small
 
+      - name: Install zx
+        run: curl -fsSL https://ziex.dev/install | bash
+
       - name: Export Site
-        run: zig build zx -- export
+        run: zx export
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
