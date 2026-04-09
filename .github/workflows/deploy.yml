@@ -33,19 +33,10 @@ jobs:
         uses: actions/configure-pages@v5
         
       - name: Build Site
-        run: zig build --release=small
-      
-      - name: Install zx
-        run: curl -fsSL https://ziex.dev/install | bash
-        
-      - name: Set zx permission
-        run: chmod +x ~/.zx/bin/zx
-      
-      - name: Checkout version
-        run: ~/.zx/bin/zx v
+        run: zig build
 
       - name: Export Site
-        run: ~/.zx/bin/zx export
+        run: zig build zx -- export
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
