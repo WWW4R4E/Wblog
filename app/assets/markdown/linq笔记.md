@@ -16,14 +16,14 @@ LINQ方法语法又称Fluent语法（连贯语法）
 
 这两个静态类结构几乎一样，但适用场景和执行方式完全不同。
 
-| 特性 | Enumerable | Queryable |
-|------|------------|-----------|
-| 目标接口 | `IEnumerable<T>` | `IQueryable<T>` |
-| 数据源 | 内存中的集合 | 远程数据源（数据库等） |
-| 代表类型 | `List<T>`, `Dictionary<K,V>`, 数组 | Entity Framework 的 `DbSet<T>` |
-| Lambda 参数 | `Func<T, bool>` 委托 | `Expression<Func<T, bool>>` 表达式树 |
-| 执行方式 | 直接执行，本地计算 | 翻译成 SQL，远程执行 |
-| 延迟执行 | 支持（迭代时执行） | 支持（翻译 + 远程执行） |
+|    特性     |             Enumerable             |              Queryable               |
+| :---------: | :--------------------------------: | :----------------------------------: |
+|  目标接口   |          `IEnumerable<T>`          |           `IQueryable<T>`            |
+|   数据源    |            内存中的集合            |        远程数据源（数据库等）        |
+|  代表类型   | `List<T>`, `Dictionary<K,V>`, 数组 |    Entity Framework 的 `DbSet<T>`    |
+| Lambda 参数 |        `Func<T, bool>` 委托        | `Expression<Func<T, bool>>` 表达式树 |
+|  执行方式   |         直接执行，本地计算         |         翻译成 SQL，远程执行         |
+|  延迟执行   |         支持（迭代时执行）         |       支持（翻译 + 远程执行）        |
 
 ### 核心差异：委托 vs 表达式树
 

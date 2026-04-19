@@ -104,7 +104,11 @@ fn parseBlogPost(content: []const u8, allocator: std.mem.Allocator, index: usize
 pub fn markdownToHtml(markdown: []const u8) ![]const u8 {
     const allocator = std.heap.page_allocator;
     const html = blk: {
-        var doc = try markz.parse(allocator, markdown);
+        var doc = try markz.parseWith(allocator, markdown, .{
+            .gfm = true,
+            .critic_markup = true,
+            .obsidian = true,
+        });
         defer doc.deinit();
         break :blk try markz.renderHtml(allocator, &doc);
     };
