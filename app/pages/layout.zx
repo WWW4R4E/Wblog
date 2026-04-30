@@ -1,21 +1,21 @@
 pub fn Layout(ctx: zx.LayoutCtx(AppCtx, void), children: zx.Component) zx.Component {
     return (
-        <html @allocator={ctx.arena} lang="en-US">
+        <html @allocator={ctx.arena} data-theme={if (is_dark) "dark" else "light"}>
             <head>
                 <meta charset="UTF-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <meta name="viewport" content="width=device-width initial-scale=1.0" />
                 <title>WBlog</title>
-                <link href="https://cdn.jsdelivr.net/npm/windows-ui-fabric@4.0.2/dist/config/app-config.css" rel="stylesheet" /> 
-                <link href="https://cdn.jsdelivr.net/npm/windows-ui-fabric@4.0.2/dist/windows-ui.min.css" rel="stylesheet" /> 
-                <link rel="stylesheet" href="/assets/style.css" />
+                <link href="https://cdn.jsdelivr.net/npm/windows-ui-fabric@4.0.2/dist/config/app-config.css" rel="stylesheet" />
+                <link href="https://cdn.jsdelivr.net/npm/windows-ui-fabric@4.0.2/dist/windows-ui.min.css" rel="stylesheet" />
+                <link rel="stylesheet" href="/assets/style.css" /> 
             </head>
 
-            <body class="body-layout">
+            <body class={if (is_dark) "dark-theme" else ""}>
                 <BlogHeader is_dark={is_dark} />
                 <main class="main-content">
                     {children}
                 </main>
-                <BlogSidebar count={ctx.app.blog_list.len} />
+                <BlogSidebar tag_map={ctx.app.tag_map} blog_list={ctx.app.blog_list} />
                 <BlogFooter />
             </body>
         </html>
@@ -23,9 +23,8 @@ pub fn Layout(ctx: zx.LayoutCtx(AppCtx, void), children: zx.Component) zx.Compon
 }
 
 var is_dark: bool = false;
-const md = @import("../mdloader.zig");
 const zx = @import("zx");
-const AppCtx = struct { blog_list: []md.BlogPost = &[_]md.BlogPost{} };
+const AppCtx = @import("../app_ctx.zig").AppCtx;
 pub const BlogHeader = @import("../component/BlogHeader.zx").BlogHeader;
 pub const BlogFooter = @import("../component/BlogFooter.zx").BlogFooter;
 pub const BlogSidebar = @import("../component/BlogSidebar.zx").BlogSidebar;

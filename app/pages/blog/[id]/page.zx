@@ -1,6 +1,5 @@
-var blog_list: []md.BlogPost = undefined;
-pub fn Page(ctx: zx.PageContext) !zx.Component {
-    blog_list = try md.loadBlogPosts();
+pub fn Page(ctx: zx.PageCtx(AppCtx, void)) !zx.Component {
+    const blog_list = ctx.app.blog_list;
     const query: usize = try std.fmt.parseInt(usize, ctx.request.params.get("id") orelse return error.MissingId, 10);
     const post = blog_list[query];
     const html_content = try md.markdownToHtml(post.content);
@@ -69,20 +68,19 @@ pub const options = zx.PageOptions{
 
 fn getStaticParams(allocator: zx.Allocator) ![]const []const zx.PageOptions.StaticParam {
     const bl = try md.loadBlogPosts();
-    var params = std.ArrayList([]const zx.PageOptions.StaticParam).empty;
+    var params = try std.ArrayList([]const zx.PageOptions.StaticParam).initCapacity(allocator, bl.len);
+    defer params.deinit(allocator);
 
-    for (bl) |i| {
+    for (bl) |post| {
         const sp = try allocator.alloc(zx.PageOptions.StaticParam, 1);
-        sp[0] = .{ .key = "id", .value = i.index };
-        try params.append(allocator, sp);
+        sp[0] = .{ .key = "id", .value = post.index };
+        params.appendAssumeCapacity(sp);
     }
-    return params.items;
+    return try params.toOwnedSlice(allocator);
 }
 
-const zx = @import("zx");
-const BlogPost = @import("../../../mdloader.zig").BlogPost;
-const BlogMeta = @import("../../../mdloader.zig").BlogMeta;
-const PostMeta = @import("../../../component/PostMeta.zx").PostMeta;
-const AppCtx = struct { blog_list: []md.BlogPost = &[_]md.BlogPost{} };
-const md = @import("../../../mdloader.zig");
 const std = @import("std");
+const zx = @import("zx");
+const PostMeta = @import("../../../component/PostMeta.zx").PostMeta;
+const AppCtx = @import("../../../app_ctx.zig").AppCtx;
+const md = @import("../../../mdloader.zig");

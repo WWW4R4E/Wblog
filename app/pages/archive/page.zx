@@ -1,41 +1,23 @@
-pub fn Page(ctx: zx.PageContext) !zx.Component {
+pub fn Page(ctx: zx.PageCtx(AppCtx, void)) !zx.Component {
+    const blog_list = ctx.app.blog_list;
     return (
         <div @allocator={ctx.arena} class="blog-post-container">
-            
-                <h1 class="page-title">归档</h1> 
-            // <div class="post-card">
-            //     <h3 class="year-title">2026</h3>
-            //     <ul class="post-list">
-            //         <li class="post-item">
-            //             <a href="Wblog/blog?0" class="post-link">
-            //                 <span class="post-title">测试文章</span>
-            //                 <span class="tag">04-01</span>
-            //             </a>
-            //         </li>
-            //     </ul>
-            // </div>
-            // <div class="post-card">
-            //     <h3 class="year-title">2025</h3>
-            //     <ul class="post-list">
-            //         <li>
-            //             <a href="Wblog/blog?1" class="post-link">
-            //                 <span class="post-title">DX11渲染初始化流程笔记</span>
-            //                 <span class="tag">12-15</span>
-            //             </a>
-            //         </li>
-            //         <li class="post-item">
-            //             <a href="Wblog/blog?2" class="post-link">
-            //                 <span class="post-title">3D变换矩阵详解</span>
-            //                 <span class="tag">11-20</span>
-            //             </a>
-            //         </li>
-            //     </ul>
-            // </div>
+            <h1 class="page-title">归档</h1>
+            <div class="post-card">
+                <ul class="post-list">
+                    {for (blog_list) |post| (
+                        <li class="post-item">
+                            <a href={`/blog/${post.index}`} class="post-link">
+                                <span class="post-title">{post.title}</span>
+                                <span class="tag">{post.meta.date}</span>
+                            </a>
+                        </li>
+                    )}
+                </ul>
+            </div>
         </div>
     );
 }
 
-var is_dark: bool = false;
-
 const zx = @import("zx");
-const std = @import("std");
+const AppCtx = @import("../../app_ctx.zig").AppCtx;

@@ -3,7 +3,6 @@ date: "2024-04-18"
 category: "编程语言"  
 read_time: "15分钟阅读"  
 title: "Zig语言指针详解：从基础到高级用法"  
-href: "zig-pointers-tutorial"  
 excerpt: "深入解析Zig语言的指针系统，包括单项指针、多项指针、切片、可空指针等特性，以及与C语言指针的安全性对比。"  
 tags: ["笔记", "Zig", "指针"]  
 ---

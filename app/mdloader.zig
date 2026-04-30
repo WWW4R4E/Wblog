@@ -3,6 +3,8 @@ const fs = std.fs;
 const mem = std.mem;
 
 const markz = @import("markz");
+const BlogPost = @import("types.zig").BlogPost;
+const BlogMeta = @import("types.zig").BlogMeta;
 
 pub fn loadBlogPosts() ![]BlogPost {
     const allocator = std.heap.page_allocator;
@@ -44,7 +46,6 @@ fn parseBlogPost(content: []const u8, allocator: std.mem.Allocator, index: usize
     var category: ?[]const u8 = null;
     var read_time: ?[]const u8 = null;
     var title: ?[]const u8 = null;
-    var href: ?[]const u8 = null;
     var excerpt: ?[]const u8 = null;
     var tags: std.ArrayList([]const u8) = .empty;
     defer tags.deinit(allocator);
@@ -64,9 +65,6 @@ fn parseBlogPost(content: []const u8, allocator: std.mem.Allocator, index: usize
         } else if (mem.startsWith(u8, trimmed, "title: ")) {
             title = mem.trim(u8, trimmed[7..], "\"");
             if (title.?.len == 0) return error.EmptyTitle;
-        } else if (mem.startsWith(u8, trimmed, "href: ")) {
-            href = mem.trim(u8, trimmed[6..], "\"");
-            if (href.?.len == 0) return error.EmptyHref;
         } else if (mem.startsWith(u8, trimmed, "excerpt: ")) {
             excerpt = mem.trim(u8, trimmed[9..], "\"");
             if (excerpt.?.len == 0) return error.EmptyExcerpt;
@@ -82,7 +80,7 @@ fn parseBlogPost(content: []const u8, allocator: std.mem.Allocator, index: usize
         }
     }
 
-    if (date == null or category == null or read_time == null or title == null or href == null or excerpt == null) {
+    if (date == null or category == null or read_time == null or title == null or excerpt == null) {
         return error.MissingRequiredFields;
     }
 
@@ -94,7 +92,6 @@ fn parseBlogPost(content: []const u8, allocator: std.mem.Allocator, index: usize
             .read_time = try allocator.dupe(u8, read_time.?),
         },
         .title = try allocator.dupe(u8, title.?),
-        .href = try allocator.dupe(u8, href.?),
         .excerpt = try allocator.dupe(u8, excerpt.?),
         .tags = try tags.toOwnedSlice(allocator),
         .content = try allocator.dupe(u8, content[actual_end + 3 ..]),
@@ -115,18 +112,3 @@ pub fn markdownToHtml(markdown: []const u8) ![]const u8 {
     return html;
 }
 
-pub const BlogPost = struct {
-    index: []const u8,
-    meta: BlogMeta,
-    title: []const u8,
-    href: []const u8,
-    excerpt: []const u8,
-    tags: []const []const u8,
-    content: []const u8,
-};
-
-pub const BlogMeta = struct {
-    date: []const u8,
-    category: []const u8,
-    read_time: []const u8,
-};

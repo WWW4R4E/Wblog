@@ -1,51 +1,22 @@
-pub fn Page(ctx: zx.PageContext) !zx.Component {
-    const a = 1;
-    const b = 2;
+pub fn Page(ctx: zx.PageCtx(AppCtx, void)) !zx.Component {
+    const tag_map = ctx.app.tag_map;
+    var tag_iter = tag_map.iterator();
+    _ = tag_iter.next(); 
     return (
         <div @allocator={ctx.allocator} class="tags-page">
             <h1 class="page-title">标签</h1>
-
-            <div class="tags-container">
-                <a href="#" class="tag">前端开发
-                    <span class="tag-count">{a}</span>
-                </a>
-                <a href="#" class="tag">后端开发
-                    <span class="tag-count">{b}</span>
-                </a>
-                <a href="#" class="tag">React
-                    <span class="tag-count">{a}</span>
-                </a>
-                <a href="#" class="tag">TypeScript
-                    <span class="tag-count">{a}</span>
-                </a>
-                         <a href="#" class="tag">后端开发
-                    <span class="tag-count">{b}</span>
-                </a>
-                <a href="#" class="tag">React
-                    <span class="tag-count">{a}</span>
-                </a>
-                <a href="#" class="tag">TypeScript
-                    <span class="tag-count">{a}</span>
-                </a>         <a href="#" class="tag">后端开发
-                    <span class="tag-count">{b}</span>
-                </a>
-                <a href="#" class="tag">React
-                    <span class="tag-count">{a}</span>
-                </a>
-                <a href="#" class="tag">TypeScript
-                    <span class="tag-count">{a}</span>
-                </a>         <a href="#" class="tag">后端开发
-                    <span class="tag-count">{b}</span>
-                </a>
-                <a href="#" class="tag">React
-                    <span class="tag-count">{a}</span>
-                </a>
-                <a href="#" class="tag">TypeScript
-                    <span class="tag-count">{a}</span>
-                </a>
-            </div>
+			  <div class="tags-container">
+            {while (tag_iter.next()) |entry| (
+            	<a class="tag" href={`/tags/{entry.key_ptr.*}`}  >
+                {entry.key_ptr.*}
+                <span class="tag-count">{entry.value_ptr.*.items.len}</span>
+            </a>
+            )}
+            </div> 
         </div>
     );
 }
 
 const zx = @import("zx");
+const PostCard = @import("../../component/PostCard.zx").PostCard;
+const AppCtx = @import("../../app_ctx.zig").AppCtx;

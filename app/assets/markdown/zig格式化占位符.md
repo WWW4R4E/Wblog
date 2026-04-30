@@ -3,7 +3,6 @@ date: "2026-04-10"
 category: "技术"  
 read_time: "8分钟阅读"  
 title: "Zig 格式化占位符详解"  
-href: "zig-format-specifiers"  
 excerpt: "全面解析Zig语言的格式化占位符系统，包括基础占位符、高级格式化选项、参数索引与命名、特殊类型格式化等内容。"  
 tags: ["Zig", "格式化", "占位符", "笔记"]  
 ---

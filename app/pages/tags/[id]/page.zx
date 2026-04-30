@@ -1,0 +1,80 @@
+pub fn Page(ctx: zx.PageCtx(AppCtx, void)) !zx.Component {
+    const encoded_query: []const u8 = ctx.request.params.get("id") orelse return error.MissingId;
+    const buffer = try ctx.arena.alloc(u8, encoded_query.len);
+    @memcpy(buffer, encoded_query);
+    const query = std.Uri.percentDecodeInPlace(buffer.ptr[0..buffer.len]);
+    const blog_list = ctx.app.blog_list;
+    var result_list: std.ArrayListUnmanaged(BlogPost) = .empty;
+    for (blog_list) |item| {
+        for (item.tags) |tag| {
+            if (std.mem.eql(u8, tag, query)) {
+                try result_list.append(ctx.arena, item);
+
+                break;
+            }
+        }
+    }
+    defer result_list.deinit(ctx.arena);
+    const filtered_items = try result_list.toOwnedSlice(ctx.arena);
+    return (
+        <div class="blog-content" @allocator={ctx.arena}>
+            <div class="blog-post-list">
+                <div class="list-header">
+                    <h1 class="page-title">{query}</h1> 
+                </div> 
+
+                <div class="posts-container">
+                    {for (filtered_items) |post| (
+                        <PostCard post={post} />
+                    )}
+                </div> 
+
+                <div class="pagination">
+                    <a href="?page=1" class="app-btn page-link">← 上一页</a>
+
+                    <div class="page-numbers">
+                        <a href="?page=1" class="app-btn page-link">1</a>
+                        <a href="?page=2" class="app-btn page-link">2</a>
+                        <a href="?page=3" class="app-btn page-link">3</a>
+                        <span class="page-ellipsis">...</span>
+                        <a href="?page=10" class="app-btn page-link">10</a>
+                    </div>
+
+                    <a href="?page=2" class="app-btn page-link">下一页 →</a>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+pub const options = zx.PageOptions{
+    .static = .{
+        .getParams = getStaticParams,
+    },
+};
+
+fn getStaticParams(allocator: zx.Allocator) ![]const []const zx.PageOptions.StaticParam {
+    const bl = try md.loadBlogPosts();
+    var params = std.ArrayList([]const zx.PageOptions.StaticParam).empty;
+
+    var tag_set = std.StringHashMap(void).init(allocator);
+    defer tag_set.deinit();
+
+    for (bl) |post| {
+        for (post.tags) |tag| {
+            const gop = try tag_set.getOrPut(tag);
+            if (gop.found_existing) continue;
+            const sp = try allocator.alloc(zx.PageOptions.StaticParam, 1);
+            sp[0] = .{ .key = "id", .value = tag };
+            try params.append(allocator, sp);
+        }
+    }
+    return params.items;
+}
+
+const zx = @import("zx");
+const std = @import("std");
+const BlogPost = @import("../../../types.zig").BlogPost;
+const PostCard = @import("../../../component/PostCard.zx").PostCard;
+const AppCtx = @import("../../../app_ctx.zig").AppCtx;
+const md = @import("../../../mdloader.zig");

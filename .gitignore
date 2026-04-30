@@ -1,6 +1,7 @@
 # Zig
 .zig-cache
 zig-out
+zig-pkg
 
 # ZX
 /bundle
@@ -8,3 +9,4 @@ zig-out
 
 # Node.js
 node_modules
+

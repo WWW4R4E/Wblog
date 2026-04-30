@@ -4,12 +4,21 @@ pub fn PostMeta(ctx: *zx.ComponentCtx(struct { meta: BlogMeta })) zx.Component {
     meta = ctx.state(BlogMeta, ctx.props.meta);
     return (
         <div class="post-meta" @allocator={ctx.allocator}>
-            <span class="app-btn">{meta.get().date}</span>
-            <span class="app-btn">{meta.get().category}</span>
-            <span class="app-btn">{meta.get().read_time}</span>
+            // <button class="app-btn">
+            // <span>{meta.get().date}</span>
+            // </button>
+            <button class="app-btn">
+                <span>Default Button</span>
+            </button>
+            <button class="app-btn">
+                <span>{meta.get().category}</span>
+            </button>
+            <button class="app-btn">
+                <span>{meta.get().read_time}</span>
+            </button>
         </div>
     );
 }
 
-const BlogMeta = @import("../mdloader.zig").BlogMeta;
+const BlogMeta = @import("../types.zig").BlogMeta;
 const zx = @import("zx");

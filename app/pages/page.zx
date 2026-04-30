@@ -46,7 +46,5 @@ pub fn Page(ctx: zx.PageCtx(AppCtx, void)) !zx.Component {
 var is_dark: bool = false;
 
 const zx = @import("zx");
-const BlogPost = @import("../mdloader.zig").BlogPost;
 const PostCard = @import("../component/PostCard.zx").PostCard;
-const AppCtx = struct { blog_list: []md.BlogPost = &[_]md.BlogPost{} };
-const md = @import("../mdloader.zig");
+const AppCtx = @import("../app_ctx.zig").AppCtx;

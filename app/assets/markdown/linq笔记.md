@@ -3,9 +3,8 @@ date: "2026-04-10"
 category: "技术"  
 read_time: "8分钟阅读"  
 title: "LINQ 核心概念解析"  
-href: "linq-notes"  
 excerpt: "深入解析LINQ的核心概念，包括Enumerable与Queryable的区别、委托与表达式树的差异，以及LINQ的语法演变。"  
-tags: ["LINQ", "C#", "笔记"]  
+tags: ["LINQ", "CSharp", "笔记"]  
 ---
 
 ## LINQ

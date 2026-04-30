@@ -1,6 +1,36 @@
-var count: *zx.State(usize) = undefined;
-pub fn BlogSidebar(ctx: *zx.ComponentCtx(struct { count: usize })) zx.Component {
-    count = ctx.state(usize, ctx.props.count);
+pub fn BlogSidebar(ctx: *zx.ComponentCtx(struct { tag_map: std.StringHashMap(std.ArrayList(BlogPost)), blog_list: []BlogPost })) zx.Component {
+    const tag_map = ctx.props.tag_map;
+    const blog_list = ctx.props.blog_list;
+
+    var tag_iter = tag_map.iterator();
+    var tag_items: [5][]const u8 = undefined;
+    var tag_count: usize = 0;
+    while (tag_iter.next()) |entry| {
+        if (tag_count >= 5) break;
+        tag_items[tag_count] = entry.key_ptr.*;
+        tag_count += 1;
+    }
+
+    var year_counts: [4]struct { year: []const u8, cnt: usize } = undefined;
+    var year_num: usize = 0;
+    for (blog_list) |post| {
+        const date = post.meta.date;
+        if (date.len < 4) continue;
+        const year = date[0..4];
+        var found = false;
+        for (year_counts[0..year_num]) |*yc| {
+            if (std.mem.eql(u8, yc.year, year)) {
+                yc.cnt += 1;
+                found = true;
+                break;
+            }
+        }
+        if (!found and year_num < 4) {
+            year_counts[year_num] = .{ .year = year, .cnt = 1 };
+            year_num += 1;
+        }
+    }
+
     return (
         <aside @allocator={ctx.allocator} class="blog-sidebar">
             <div class="sidebar-section profile-section">
@@ -16,24 +46,24 @@ pub fn BlogSidebar(ctx: *zx.ComponentCtx(struct { count: usize })) zx.Component 
             <div class="sidebar-section tags-section">
                 <h4 class="sidebar-title">热门标签</h4>
                 <div class="tag-cloud">
-                    <a class="tag">Csharp</a>
-                    <a class="tag">Zig</a>
-                    <a class="tag">windows</a>
-                    <a class="tag">Linux</a>
-                    <a class="tag">读书笔记</a>
+                    {for (tag_items[0..tag_count]) |tag| (
+                        <a class="tag" href={`/tags/{tag}`}>{tag}</a>
+                    )}
                 </div>
             </div>
 
             <div class="sidebar-section archive-section">
                 <h4 class="sidebar-title">归档</h4>
                 <ul class="archive-list">
-                    <li><a href="/archive/2024" class="archive-link">2026年 ({count})</a></li>
+                    {for (year_counts[0..year_num]) |yc| (
+                        <li><a href="/archive" class="archive-link">{yc.year}年 ({yc.cnt})</a></li>
+                    )}
                 </ul>
             </div>
         </aside>
     );
 }
 
+const std = @import("std");
 const zx = @import("zx");
-const AppCtx = struct { blog_list: []md.BlogPost = &[_]md.BlogPost{} };
-const md = @import("../mdloader.zig");
+const BlogPost = @import("../types.zig").BlogPost;
