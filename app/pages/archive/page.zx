@@ -1,5 +1,5 @@
-pub fn Page(ctx: zx.PageCtx(AppCtx, void)) !zx.Component {
-    const blog_list = ctx.app.blog_list;
+pub fn Page(ctx: zx.PageContext, app: AppCtx) !zx.Component {
+    const blog_list = app.blog_list;
     return (
         <div @allocator={ctx.arena} class="blog-post-container">
             <h1 class="page-title">归档</h1>

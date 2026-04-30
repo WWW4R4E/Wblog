@@ -1,9 +1,9 @@
-pub fn Page(ctx: zx.PageCtx(AppCtx, void)) !zx.Component {
+pub fn Page(ctx: zx.PageContext, app: AppCtx) !zx.Component {
     const encoded_query: []const u8 = ctx.request.params.get("id") orelse return error.MissingId;
     const buffer = try ctx.arena.alloc(u8, encoded_query.len);
     @memcpy(buffer, encoded_query);
     const query = std.Uri.percentDecodeInPlace(buffer.ptr[0..buffer.len]);
-    const blog_list = ctx.app.blog_list;
+    const blog_list = app.blog_list;
     var result_list: std.ArrayListUnmanaged(BlogPost) = .empty;
     for (blog_list) |item| {
         for (item.tags) |tag| {

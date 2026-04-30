@@ -1,13 +1,11 @@
-var is_dark: *zx.State(bool) = undefined;
+pub fn BlogHeader(allocator: zx.Allocator) zx.Component {
 
-pub fn BlogHeader(ctx: *zx.ComponentCtx(struct { is_dark: bool })) zx.Component {
-    is_dark = ctx.state(bool, ctx.props.is_dark);
     return (
-        <header @allocator={ctx.allocator} class="blog-header">
+        <header @allocator={allocator} class="blog-header">
             <div class="header-container">
                 <div class="logo-section">
                     <a href="/" class="logo">Wblog</a>
-                </div> 
+                </div>
 
                 <nav class="nav-menu">
                     <a href="/" class="nav-link">首页</a>
@@ -29,7 +27,7 @@ pub fn BlogHeader(ctx: *zx.ComponentCtx(struct { is_dark: bool })) zx.Component 
                     </div>
 
                     <div class="theme-toggle-section">
-                        <CounterComponent @rendering={.client} is_dark={is_dark.get()} />
+                        <ThemeSwitch @rendering={.client} />
                     </div> 
                 </div>
             </div>
@@ -38,4 +36,4 @@ pub fn BlogHeader(ctx: *zx.ComponentCtx(struct { is_dark: bool })) zx.Component 
 }
 
 const zx = @import("zx");
-pub const CounterComponent = @import("./client.zig").CounterComponent;
+pub const ThemeSwitch = @import("./client.zig").ThemeSwitch;

@@ -1,4 +1,4 @@
-pub fn Layout(ctx: zx.LayoutCtx(AppCtx, void), children: zx.Component) zx.Component {
+pub fn Layout(ctx: zx.LayoutContext, children: zx.Component, app: AppCtx) zx.Component {
     return (
         <html @allocator={ctx.arena} data-theme={if (is_dark) "dark" else "light"}>
             <head>
@@ -11,18 +11,18 @@ pub fn Layout(ctx: zx.LayoutCtx(AppCtx, void), children: zx.Component) zx.Compon
             </head>
 
             <body class={if (is_dark) "dark-theme" else ""}>
-                <BlogHeader is_dark={is_dark} />
+                <BlogHeader />
                 <main class="main-content">
                     {children}
                 </main>
-                <BlogSidebar tag_map={ctx.app.tag_map} blog_list={ctx.app.blog_list} />
+                <BlogSidebar tag_map={app.tag_map} blog_list={app.blog_list} />
                 <BlogFooter />
             </body>
         </html>
     );
 }
 
-var is_dark: bool = false;
+var is_dark: bool = true;
 const zx = @import("zx");
 const AppCtx = @import("../app_ctx.zig").AppCtx;
 pub const BlogHeader = @import("../component/BlogHeader.zx").BlogHeader;

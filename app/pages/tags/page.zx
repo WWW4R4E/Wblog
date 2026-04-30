@@ -1,5 +1,5 @@
-pub fn Page(ctx: zx.PageCtx(AppCtx, void)) !zx.Component {
-    const tag_map = ctx.app.tag_map;
+pub fn Page(ctx: zx.PageContext, app: AppCtx) !zx.Component {
+    const tag_map = app.tag_map;
     var tag_iter = tag_map.iterator();
     _ = tag_iter.next(); 
     return (
