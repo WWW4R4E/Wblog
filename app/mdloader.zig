@@ -6,23 +6,22 @@ const markz = @import("markz");
 const BlogPost = @import("types.zig").BlogPost;
 const BlogMeta = @import("types.zig").BlogMeta;
 
-pub fn loadBlogPosts() ![]BlogPost {
-    const allocator = std.heap.page_allocator;
+pub fn loadBlogPosts(io: std.Io, allocator: std.mem.Allocator) ![]BlogPost {
     const markdown_dir = "app" ++ std.fs.path.sep_str ++ "assets" ++ std.fs.path.sep_str ++ "markdown";
-    var dir = try fs.cwd().openDir(markdown_dir, .{ .iterate = true });
-    defer dir.close();
+    var dir = try std.Io.Dir.cwd().openDir(io, markdown_dir, .{ .iterate = true });
+    defer dir.close(io);
 
     var index: usize = 0;
     var iter = dir.iterate();
     var posts: std.ArrayList(BlogPost) = .empty;
     defer posts.deinit(allocator);
 
-    while (try iter.next()) |entry| {
+    while (try iter.next(io)) |entry| {
         if (entry.kind == .file and mem.endsWith(u8, entry.name, ".md")) {
             const file_path = try std.fmt.allocPrint(allocator, "{s}/{s}", .{ markdown_dir, entry.name });
             defer allocator.free(file_path);
 
-            const content = try fs.cwd().readFileAlloc(allocator, file_path, 1024 * 1024);
+            const content = try std.Io.Dir.cwd().readFileAlloc(io, file_path, allocator, .unlimited);
             defer allocator.free(content);
 
             const post = try parseBlogPost(content, allocator, index);
@@ -111,4 +110,3 @@ pub fn markdownToHtml(markdown: []const u8) ![]const u8 {
     };
     return html;
 }
-
