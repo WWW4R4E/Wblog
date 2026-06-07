@@ -2,7 +2,7 @@
     .name = .ziex_app,
     .version = "0.0.0",
     .fingerprint = 0x7246d8c908f650a4,
-    .minimum_zig_version = "0.15.2",
+    .minimum_zig_version = "0.16.0",
     .dependencies = .{
         .markz = .{
             .url = "git+https://codeberg.org/sicher/markz#690daf1bd3c734bd1fb86bf334e1c491dd59de94",
