@@ -2,12 +2,15 @@
     .name = .ziex_app,
     .version = "0.0.0",
     .fingerprint = 0x7246d8c908f650a4,
-    .minimum_zig_version = "0.15.2",
+    .minimum_zig_version = "0.16.0",
     .dependencies = .{
-        .zx = .{ .url = "git+https://github.com/ziex-dev/ziex#26f8b93475c0c77b6455565c5368e3b252b62b4f", .hash = "zx-0.1.0-dev.1050-8okzKqZJnAF2jGv7qtqmp0otrfbCNgGhlKgoeM1QqJUK", },
         .markz = .{
-            .url = "git+https://codeberg.org/sicher/markz?ref=main#5f56ce8364b5af5af72afe63ca335f39a756b34e",
-            .hash = "markz-0.1.0-53lpvKOcBgAKt-21K3lqIjiqxRNaJTsC9c6VA-BOq2_W",
+            .url = "git+https://codeberg.org/sicher/markz#690daf1bd3c734bd1fb86bf334e1c491dd59de94",
+            .hash = "markz-0.1.0-53lpvE-hBgCmxKok0N8pzZ-S7Rndp7pDOP1cTvxtP49T",
+        },
+        .ziex = .{
+            .url = "git+https://github.com/ziex-dev/ziex#09f13ef8f17b5cef94342564fe8d0c58ae41aab4",
+            .hash = "ziex-0.1.0-dev-Z3YcvSwInQEFihRHRPtY50nw44Siw3b6pYjz7ECHrryt",
         },
     },
     .paths = .{

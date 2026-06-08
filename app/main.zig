@@ -1,4 +1,4 @@
-pub fn main() !void {
+pub fn main(init: zx.Init) !void {
     const TagMap = std.StringHashMap(std.ArrayList(BlogPost));
     var tag_map = TagMap.init(zx.allocator);
     defer tag_map.deinit();
@@ -6,7 +6,7 @@ pub fn main() !void {
     var blog_list: []BlogPost = &.{};
     if (@import("builtin").target.cpu.arch != .wasm32) {
         const md = @import("mdloader.zig");
-        blog_list = try md.loadBlogPosts();
+        blog_list = try md.loadBlogPosts(zx.io(), zx.allocator);
         for (blog_list) |item| {
             for (item.tags) |tag| {
                 const entry = try tag_map.getOrPut(tag);
@@ -20,7 +20,7 @@ pub fn main() !void {
 
     const app_ctx = AppCtx{ .blog_list = blog_list, .tag_map = tag_map };
 
-    var app = try zx.App(AppCtx).init(zx.allocator, .{}, app_ctx);
+    var app = try zx.App(AppCtx).init(init, zx.io(), zx.allocator, .{}, app_ctx);
     // defer app.deinit();
 
     try app.start();

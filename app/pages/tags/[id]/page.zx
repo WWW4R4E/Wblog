@@ -54,7 +54,7 @@ pub const options = zx.PageOptions{
 };
 
 fn getStaticParams(allocator: zx.Allocator) ![]const []const zx.PageOptions.StaticParam {
-    const bl = try md.loadBlogPosts();
+    const bl = try md.loadBlogPosts(zx.io(), allocator);
     var params = std.ArrayList([]const zx.PageOptions.StaticParam).empty;
 
     var tag_set = std.StringHashMap(void).init(allocator);

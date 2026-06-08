@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const zx = @import("zx");
+const zx = @import("ziex");
 
 pub fn build(b: *std.Build) !void {
     // --- Target and Optimize from `zig build` arguments ---
