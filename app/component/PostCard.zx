@@ -1,9 +1,11 @@
-pub fn PostCard(ctx: *zx.ComponentCtx(struct { post: BlogPost })) !zx.Component {
+pub fn PostCard(ctx: *zx.ComponentCtx(struct { post: BlogPost, index: usize = 0 })) !zx.Component {
     const post = ctx.props.post;
     const url = try std.fmt.allocPrint(ctx.allocator, "/blog/{s}", .{post.index});
+    const card_id = try std.fmt.allocPrint(ctx.allocator, "post-card-{d}", .{ctx.props.index});
+    const search_text = try buildSearchText(ctx.allocator, post);
 
     return (
-        <article class="post-card" @allocator={ctx.allocator}>
+        <article class="post-card" id={card_id} data-search={search_text} @allocator={ctx.allocator}>
             <PostMeta meta={post.meta} />
             <h2 class="post-title">
                 <a href={url} class="post-link">
@@ -27,6 +29,20 @@ pub fn PostCard(ctx: *zx.ComponentCtx(struct { post: BlogPost })) !zx.Component 
             </div> 
         </article> 
     ); 
+}
+
+fn buildSearchText(allocator: std.mem.Allocator, post: BlogPost) ![]const u8 {
+    var buf = std.ArrayList(u8).empty;
+    try buf.appendSlice(allocator, post.title);
+    try buf.append(allocator, ' ');
+    try buf.appendSlice(allocator, post.excerpt);
+    for (post.tags) |tag| {
+        try buf.append(allocator, ' ');
+        try buf.appendSlice(allocator, tag);
+    }
+    const text = try buf.toOwnedSlice(allocator);
+    for (text) |*c| c.* = std.ascii.toLower(c.*);
+    return text;
 }
 
 const zx = @import("zx");

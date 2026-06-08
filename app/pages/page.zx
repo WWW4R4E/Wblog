@@ -4,27 +4,16 @@ pub fn Page(ctx: zx.PageContext, app: AppCtx) !zx.Component {
         <div class="blog-content" @allocator={ctx.arena}>
             <div class="blog-post-list">
                 <div class="list-header">
-                    <h1 class="page-title">首页</h1> 
-                    <div class=" search-form">
-                        <div class="app-input-search-bar ">
-                            <input class="app-input-text" type="search" placeholder="Search here"> </input>
-                            <div class="app-input-end-content">
-                                <button type="submit" style="border: none; background: transparent;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;">
-                                        <circle cx="11" cy="11" r="8"></circle>
-                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                    </svg>
-                                </button>
-                            </div> 
-                        </div>
-                    </div>
-                </div> 
+                    <h1 class="page-title">首页</h1>
+                    <SearchBar @rendering={.client} count={blog_list.len} />
+                </div>
 
                 <div class="posts-container">
-                    {for (blog_list) |post| (
-                        <PostCard post={post} />
+                    {for (blog_list, 0..) |post, i| (
+                        <PostCard post={post} index={i} />
                     )}
-                </div> 
+                    <div id="search-empty" class="search-empty" style="display: none;">没有找到匹配的文章</div>
+                </div>
 
                 <div class="pagination">
                     <a href="?page=1" class="app-btn page-link">← 上一页</a>
@@ -45,6 +34,82 @@ pub fn Page(ctx: zx.PageContext, app: AppCtx) !zx.Component {
 }
 var is_dark: bool = false;
 
+pub fn SearchBar(ctx: *zx.ComponentCtx(struct { count: usize = 0 })) zx.Component {
+    _ = ctx.state(usize, ctx.props.count);
+
+    return (
+        <div class="search-form" @allocator={ctx.allocator}>
+            <div class="app-input-search-bar">
+                <input
+                    class="app-input-text"
+                    id="blog-search-input"
+                    type="search"
+                    placeholder="Search here"
+                    oninput={ctx.bind(onSearchInput)}
+                />
+                <div class="app-input-end-content">
+                    <button type="button" style="border: none; background: transparent;">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style="width: 16px; height: 16px;"
+                        >
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+fn onSearchInput(e: *zx.client.Event.Stateful) void {
+    if (!zx.platform.isClient()) return;
+
+    const count_state = e.state(usize);
+    const count = count_state.get();
+
+    const raw = e.value() orelse "";
+    const query = std.ascii.allocLowerString(zx.allocator, raw) catch return;
+    defer zx.allocator.free(query);
+
+    const document = zx.client.Document.init(zx.allocator);
+    var visible: usize = 0;
+
+    var i: usize = 0;
+    while (i < count) : (i += 1) {
+        const card_id = std.fmt.allocPrint(zx.allocator, "post-card-{d}", .{i}) catch continue;
+        defer zx.allocator.free(card_id);
+
+        const card = document.getElementById(card_id) catch continue;
+
+        const search_text = card.ref.callAlloc(js.String, zx.allocator, "getAttribute", .{js.string("data-search")}) catch continue;
+        defer zx.allocator.free(search_text);
+
+        const matches = query.len == 0 or std.mem.indexOf(u8, search_text, query) != null;
+        setDisplay(card, if (matches) "" else "none");
+        if (matches) visible += 1;
+    }
+
+    if (document.getElementById("search-empty") catch null) |empty| {
+        setDisplay(empty, if (visible == 0) "block" else "none");
+    }
+}
+
+fn setDisplay(element: zx.client.Document.HTMLElement, value: []const u8) void {
+    const style = element.ref.get(js.Object, "style") catch return;
+    style.set("display", js.string(value)) catch {};
+}
+
+const js = zx.Client.js;
+
 const zx = @import("zx");
+const std = @import("std");
+
 const PostCard = @import("../component/PostCard.zx").PostCard;
 const AppCtx = @import("../app_ctx.zig").AppCtx;
