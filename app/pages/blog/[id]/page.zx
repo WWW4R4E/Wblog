@@ -61,22 +61,14 @@ pub fn Page(ctx: zx.PageContext, app: AppCtx) !zx.Component {
 }
 
 pub const options = zx.PageOptions{
-    .static = .{
-        .getParams = getStaticParams,
-    },
+    .static = getStaticParams,
 };
 
-fn getStaticParams(allocator: zx.Allocator) ![]const []const zx.PageOptions.StaticParam {
-    const bl = try md.loadBlogPosts(zx.io(), allocator);
-    var params = try std.ArrayList([]const zx.PageOptions.StaticParam).initCapacity(allocator, bl.len);
-    defer params.deinit(allocator);
-
+fn getStaticParams(ctx: *zx.StaticContext) !void {
+    const bl = try md.loadBlogPosts(zx.io(), ctx.arena);
     for (bl) |post| {
-        const sp = try allocator.alloc(zx.PageOptions.StaticParam, 1);
-        sp[0] = .{ .key = "id", .value = post.index };
-        params.appendAssumeCapacity(sp);
+        try ctx.params.add(.{ .id = post.index });
     }
-    return try params.toOwnedSlice(allocator);
 }
 
 const std = @import("std");
