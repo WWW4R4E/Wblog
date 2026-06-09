@@ -1,17 +1,14 @@
-var is_dark: *zx.State(bool) = undefined;
-
 pub fn ThemeSwitch(ctx: *zx.ComponentCtx(struct {})) !zx.Component {
-	const dark = true;
-	// dark =  getCurrentTheme();
-    // dark =false;
-    is_dark = ctx.state(bool, dark);
+    const dark = zx.client.eval(u32, "window.matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 0") catch 0;
+    const is_dark = ctx.state(bool, dark == 1);
+    applyTheme(is_dark.get());
     return (
         <div @allocator={ctx.allocator}>
             <div class="theme-toggle-section">
                 <label class="app-switch">
-                    <input type="checkbox" checked={is_dark.get()} onchange={changeTheme} /> 
-                    <div class="app-switch-view"></div> 
-                </label> 
+                    <input type="checkbox" checked={is_dark.get()} onchange={ctx.bind(changeTheme)} />
+                    <div class="app-switch-view"></div>
+                </label>
                 {if (is_dark.get()) (
                     <svg class="theme-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -33,14 +30,14 @@ pub fn ThemeSwitch(ctx: *zx.ComponentCtx(struct {})) !zx.Component {
         </div>
     );
 }
-fn getCurrentTheme() bool {
-    // return zx.client.eval(bool, "window.matchMedia('(prefers-color-scheme: dark)').matches") catch false;
-    return false;
-}
-fn changeTheme(_: zx.client.Event) void {
+fn changeTheme(e: *zx.client.Event.Stateful) void {
+    const is_dark = e.state(bool);
     is_dark.set(!is_dark.get());
+    applyTheme(is_dark.get());
+}
 
-    if (is_dark.get()) {
+fn applyTheme(dark: bool) void {
+    if (dark) {
         zx.client.eval(void, "document.body.classList.add('dark-theme')") catch {};
         zx.client.eval(void, "document.documentElement.setAttribute('data-theme', 'dark')") catch {};
     } else {
@@ -48,4 +45,6 @@ fn changeTheme(_: zx.client.Event) void {
         zx.client.eval(void, "document.documentElement.setAttribute('data-theme', 'light')") catch {};
     }
 }
+
 const zx = @import("zx");
+const std = @import("std");

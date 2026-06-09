@@ -4,9 +4,9 @@ pub fn PostMeta(ctx: *zx.ComponentCtx(struct { meta: BlogMeta })) zx.Component {
     meta = ctx.state(BlogMeta, ctx.props.meta);
     return (
         <div class="post-meta" @allocator={ctx.allocator}>
-            // <button class="app-btn">
-            // <span>{meta.get().date}</span>
-            // </button>
+            <button class="app-btn">
+                <span>{meta.get().date}</span>
+            </button>
             <button class="app-btn">
                 <span>Default Button</span>
             </button>

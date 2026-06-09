@@ -336,8 +336,33 @@ git commit --amend --no-edit
 git push --force
 ```
 A设备获取云端覆盖本地提交记录
-``` bash
+```bash
 git fetch origin
 git reset --hard origin/main
+```
+
+### Github有人发起PR，本地已有更改，需要先stash再处理PR
+
+```bash
+# 1. 先暂存本地修改
+git stash
+
+# 2. 查看PR内容（假设PR编号为123）
+git fetch origin pull/123/head:pr-123
+git checkout pr-123
+
+# 3. 在PR分支上进行处理（可能需要合并到本地分支等）
+git checkout main
+git merge pr-123
+
+# 4. 处理完成后，切回原分支
+git checkout 原分支
+
+# 5. 恢复暂存的修改
+git stash pop
+
+# 6. 解决可能的冲突后提交
+git add .
+git commit -m "处理PR合并"
 ```
 

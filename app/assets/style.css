@@ -4,16 +4,17 @@ body {
 	line-height: 1.6;
 	background-color: #f5f5f5;
 	min-height: 100vh;
-	background-image: url('background1.png');
+	background-image: url('background1.jpg');
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
 	color: #333;
 }
 
+a,
+a:active,
 a:visited {
-	color: inherit;
-	text-decoration: inherit;
+	color: #60CDFF;
 }
 
 .counter-row {
@@ -32,12 +33,6 @@ a:visited {
 .counter-plus {
 	width: 70px;
 	display: inline-block;
-}
-
-.app-page-container.home {
-	background-image:
-		radial-gradient(ellipse at top, #57aeff40, transparent),
-		radial-gradient(ellipse at bottom, #f16ec91c, transparent);
 }
 
 .content-container {
@@ -980,7 +975,7 @@ button.search-button::after {
 body.dark-theme {
 	background-color: #272727;
 	color: #ccc;
-	background-image: url('background2.png');
+	background-image: url('background2.jpg');
 }
 
 body.dark-theme .content-container {

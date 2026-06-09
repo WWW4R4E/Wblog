@@ -1,8 +1,8 @@
 pub fn Layout(ctx: zx.LayoutContext, children: zx.Component, app: AppCtx) zx.Component {
     return (
-        <html @allocator={ctx.arena} data-theme={if (is_dark) "dark" else "light"}>
+        <html @allocator={ctx.arena}>
             <head>
-                <meta charset="UTF-8" />
+                <meta charset="UTF-8" data-theme="dark" />
                 <meta name="viewport" content="width=device-width initial-scale=1.0" />
                 <title>WBlog</title>
                 <link href="https://cdn.jsdelivr.net/npm/windows-ui-fabric@4.0.2/dist/config/app-config.css" rel="stylesheet" />
@@ -10,7 +10,7 @@ pub fn Layout(ctx: zx.LayoutContext, children: zx.Component, app: AppCtx) zx.Com
                 <link rel="stylesheet" href="/assets/style.css" /> 
             </head>
 
-            <body class={if (is_dark) "dark-theme" else ""}>
+            <body class="dark-theme">
                 <BlogHeader />
                 <main class="main-content">
                     {children}
@@ -22,7 +22,6 @@ pub fn Layout(ctx: zx.LayoutContext, children: zx.Component, app: AppCtx) zx.Com
     );
 }
 
-var is_dark: bool = true;
 const zx = @import("zx");
 const AppCtx = @import("../app_ctx.zig").AppCtx;
 pub const BlogHeader = @import("../component/BlogHeader.zx").BlogHeader;
