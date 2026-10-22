@@ -1,5 +1,5 @@
 ---
-date: ""
+date: "2026-06-09"
 category: "Zig"
 read_time: "10分钟阅读"
 title: "Zig 文件读写实现指南"

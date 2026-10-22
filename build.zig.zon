@@ -2,15 +2,15 @@
     .name = .ziex_app,
     .version = "0.0.0",
     .fingerprint = 0x7246d8c908f650a4,
-    .minimum_zig_version = "0.16.0",
+    .minimum_zig_version = "0.17.0",
     .dependencies = .{
+        // Vendored from the pinned commit, patched for Zig 0.17 (`b.args` was removed).
         .markz = .{
-            .url = "git+https://codeberg.org/sicher/markz#690daf1bd3c734bd1fb86bf334e1c491dd59de94",
-            .hash = "markz-0.1.0-53lpvE-hBgCmxKok0N8pzZ-S7Rndp7pDOP1cTvxtP49T",
+            .path = "vendor/markz",
         },
         .ziex = .{
-            .url = "git+https://github.com/ziex-dev/ziex#29ac66e1e508f588bdb4b9f6127ecc29052267fb",
-            .hash = "ziex-0.1.0-dev-Z3YcvaQanQGwf0xrZ7RTHCRfE3qr0cJHow6FQmQsCf11",
+            .url = "git+https://github.com/ziex-dev/ziex#8f7f6b15b4b1355b3bf4cc1f0cb2fa1b497feea4",
+            .hash = "ziex-0.1.0-dev-Z3YcveCwnQFnnm6sb0sK-oNLeAh_aRQsksw1IP2k_A2V",
         },
     },
     .paths = .{

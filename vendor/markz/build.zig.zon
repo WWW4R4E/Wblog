@@ -1,0 +1,12 @@
+.{
+    .name = .markz,
+    .version = "0.1.0",
+    .fingerprint = 0x45b642f7bc6979e7,
+    .minimum_zig_version = "0.17.0",
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+    .dependencies = .{},
+}

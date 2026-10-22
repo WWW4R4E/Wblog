@@ -20,7 +20,7 @@ pub fn main(init: zx.Init) !void {
 
     const app_ctx = AppCtx{ .blog_list = blog_list, .tag_map = tag_map };
 
-    var app = try zx.App(AppCtx).init(init, zx.io(), zx.allocator, .{}, app_ctx);
+    var app = try zx.App.init(init, zx.io(), zx.allocator, .{}, app_ctx);
     // defer app.deinit();
 
     try app.start();
@@ -32,3 +32,5 @@ const zx = @import("zx");
 
 const AppCtx = @import("app_ctx.zig").AppCtx;
 const BlogPost = @import("types.zig").BlogPost;
+
+pub const std_options = zx.std_options;

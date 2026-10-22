@@ -7,20 +7,20 @@ pub fn Page(ctx: zx.PageContext, app: AppCtx) !zx.Component {
         <div @allocator={ctx.allocator} class="blog-post-container">
             <article class="blog-post">
                 <div class="post-header">
-                    <PostMeta meta={post.meta} /> 
-                    <h1 class="post-title">{post.title}</h1> 
-                </div> 
-                <div class="post-content" @escaping={.none}> {html_content} </div> 
+                    <PostMeta meta={post.meta} />
+                    <h1 class="post-title">{post.title}</h1>
+                </div>
+                <div class="post-content" @escaping={.none}> {html_content} </div>
                 <div class="post-footer">
                     <div class="post-actions">
                         <div class="post-tags">
                             {for (post.tags) |tag| (
                                 <a href={"/tags/{tag}"} class="tag">{tag}</a>
-                            )} 
+                            )}
                         </div>
                     </div>
-                </div> 
-            </article> 
+                </div>
+            </article>
 
             // <div class="related-posts">
             //     <h3 class="related-title">相关推荐</h3>
@@ -42,7 +42,7 @@ pub fn Page(ctx: zx.PageContext, app: AppCtx) !zx.Component {
                 <div class="comments-form">
                     <textarea placeholder="写下你的评论..." class="app-textarea comment-input"></textarea>
                     <button class="app-btn app-btn-primary comment-btn">提交评论</button>
-                </div> 
+                </div>
                 // <div class="comments-list">
                 //     <div class="comment-item">
                 //         <div class="comment-author">用户1</div>

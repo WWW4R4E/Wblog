@@ -106,7 +106,7 @@ fn setDisplay(element: zx.client.Document.HTMLElement, value: []const u8) void {
     style.set("display", js.string(value)) catch {};
 }
 
-const js = zx.Client.js;
+const js = zx.client.js;
 
 const zx = @import("zx");
 const std = @import("std");

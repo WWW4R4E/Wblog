@@ -1,5 +1,5 @@
 ---
-date: ""
+date: "2026-06-09"
 category: ".NET"
 read_time: "20分钟阅读"
 title: "dotnet new 项目模板指南"
